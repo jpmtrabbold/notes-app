@@ -1,11 +1,28 @@
 service: notes-app
 
+custom:
+  tableName_Notes: 'notes-table-${self:provider.stage}'
+
 provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
   region: ap-southeast-2
   memorySize: 128
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["NotesDynamoDBTable", "Arn" ] }
+  environment:
+    TABLENAME_NOTES: ${self:custom.tableName_Notes}
+
 
 functions:
   app:
@@ -19,6 +36,25 @@ functions:
           path: /{proxy+}
           method: ANY
           cors: true
+
+resources:
+  Resources:
+    NotesDynamoDBTable: # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: noteId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: noteId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
+
 
 plugins:
   - serverless-plugin-typescript
