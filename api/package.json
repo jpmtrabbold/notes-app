@@ -24,6 +24,7 @@
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.32",
     "@types/swagger-ui-express": "^4.1.2",
+    "@types/uuid": "^8.3.0",
     "concurrently": "^6.0.0",
     "nodemon": "^2.0.7",
     "serverless-offline": "^6.8.0",
@@ -38,6 +39,7 @@
     "serverless-http": "^2.7.0",
     "source-map-support": "^0.5.19",
     "swagger-ui-express": "^4.1.6",
-    "tsoa": "^3.5.2"
+    "tsoa": "^3.5.2",
+    "uuid": "^8.3.2"
   }
 }

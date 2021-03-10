@@ -5,6 +5,7 @@ import 'source-map-support/register'
 
 import ServerlessHttp from "serverless-http";
 import { RegisterRoutes } from "./routes/routes";
+import errorMiddleware from "./middlewares/error.middleware";
 
 const app: Application = express();
 
@@ -26,7 +27,8 @@ app.use(express.json({ strict: false }));
 //     })
 // );
 
-//app.use(Router);
 RegisterRoutes(app);
+
+app.use(errorMiddleware);
 
 export const handler = ServerlessHttp(app);

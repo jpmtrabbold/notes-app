@@ -1,6 +1,7 @@
 import { Body, Get, Post, Route } from "tsoa";
 import AWS from 'aws-sdk'
 import variables from "../variables";
+import { v1 } from 'uuid'
 
 interface NoteResponse {
     message: string;
@@ -19,10 +20,11 @@ export class NoteController {
         const response = await dynamoDb.put({
             TableName: variables.tables.notes,
             Item: {
+                noteId: v1(),
                 text: note.text
             }
         }).promise()
-        //response.$response.d
+        
         return 2;
     }
 
@@ -32,5 +34,4 @@ export class NoteController {
             message: "pong",
         };
     }
-
 }
